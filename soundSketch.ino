@@ -5,8 +5,9 @@
 
 #define NUM_LEDS 256
 #define DATA_PIN 6
+#define NUM_COLORS 8
 
-const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
+const int sampleWindow = 8; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
 
  Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(32, 8, DATA_PIN,
@@ -15,7 +16,15 @@ unsigned int sample;
   NEO_GRB            + NEO_KHZ800);
   
 const uint16_t colors[] = {
-  matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
+  matrix.Color(255, 0, 0),
+  matrix.Color(255, 127, 0),
+  matrix.Color(255, 255, 0),
+  matrix.Color(0, 255, 0),
+  matrix.Color(0, 0, 255),
+  matrix.Color(75, 0, 130),
+  matrix.Color(170, 90, 130),
+  matrix.Color(238, 130, 238)
+};
 
 void setup() {
   delay(3000);
@@ -24,23 +33,22 @@ void setup() {
 }
 
 void loop() {
-//  printRainbowText("Hell yeah !");
-//  getMicData();
+  drawVisual();
+}
+
+void drawVisual() {
   int micValue = getMicData() * 100 / 3 - 1;
   Serial.println(micValue);
   matrix.fillScreen(0);
-  matrix.fillRect(0, 0, micValue/1.25, 3, matrix.Color(0, 130, 0)); 
-  matrix.fillRect(0, 3, micValue, 2, matrix.Color(130, 0, 0)); 
-  matrix.fillRect(0, 5, micValue/1.5, 3, matrix.Color(0, 0, 130)); 
+  matrix.setBrightness(40); // for power consumption
+  for (int i=0; i < NUM_COLORS; i++) {
+    matrix.fillRect(0, i, getMicData() * 100 / 3 - 1, 1, colors[i]); 
+  }
   matrix.show();
 }
 
-//void drawVisualizer {
-// 
-//}
-
 float getMicData() {
-  unsigned long startMillis= millis();  // Start of sample window
+  unsigned long startMillis = millis();  // Start of sample window
   unsigned int peakToPeak = 0;   // peak-to-peak level
   
   unsigned int signalMax = 0;
