@@ -17,12 +17,12 @@ unsigned int sample;
   
 const uint16_t colors[] = {
   matrix.Color(255, 0, 0),
+  matrix.Color(255, 63, 0),
   matrix.Color(255, 127, 0),
   matrix.Color(255, 255, 0),
   matrix.Color(0, 255, 0),
   matrix.Color(0, 0, 255),
   matrix.Color(75, 0, 130),
-  matrix.Color(170, 90, 130),
   matrix.Color(238, 130, 238)
 };
 
